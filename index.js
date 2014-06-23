@@ -14,11 +14,17 @@ multilevel.writeManifest(db, __dirname + '/assets/manifest.json');
 
 glob.sync('./slides/*.html', function(er, files) {
   var content = [];
+  files.sort(function(a, b) {
+    return n(a) - n(b);
+    function n(x) { return +(x.replace(/\D/g, ''));}
+  });
   files.forEach(function(file) {
     content.push(fs.readFileSync(file, 'utf-8').toString());
   });
   db.put('slides', content, startServer);
 });
+
+var cache;
 
 function startServer(err) {
   if (err) return console.log(err);
@@ -35,10 +41,13 @@ function startServer(err) {
 
   server.on('request', function(q, r) {
     if (q.url === '/appcache') {
-      appcached('http://localhost:' + port, {network: ['*']}, function(err, manifest) {
-        r.setHeader('Content-Type', 'text/cache-manifest');
-        r.write(manifest);
-        r.end();
+      r.setHeader('Content-Type', 'text/cache-manifest');
+      if (cache) {
+        r.end(cache);
+      }
+      var uri = 'http://' + q.headers.host;
+      appcached(uri, {network: ['*']}, function(err, manifest) {
+        r.end(cache = manifest);
       });
     }
     if (q.url === '/') {
