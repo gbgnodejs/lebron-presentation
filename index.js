@@ -7,6 +7,7 @@ var Engine = require('engine.io-stream');
 var levelup = require('levelup');
 var leveldown = require('leveldown');
 var glob = require('glob');
+var appcached = require('appcached')
 
 var db = levelup('db', {valueEncoding: 'json', db: leveldown});
 multilevel.writeManifest(db, __dirname + '/assets/manifest.json');
@@ -33,6 +34,13 @@ function startServer(err) {
   var port = process.env.PORT || 1337;
 
   server.on('request', function(q, r) {
+    if (q.url === '/appcache') {
+      appcached('http://localhost:' + port, {network: ['*']}, function(err, manifest) {
+        r.setHeader('Content-Type', 'text/cache-manifest');
+        r.write(manifest);
+        r.end();
+      });
+    }
     if (q.url === '/') {
       r.setHeader('Content-Type', 'text/html');
       fs.createReadStream('./assets/index.html').pipe(r);

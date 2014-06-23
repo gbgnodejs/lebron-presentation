@@ -27,6 +27,7 @@
     "domify": "^1.2.2",
     "browserify": "^4.1.11",
     "supervisor": "^0.6.0",
-    "level-js": "^2.1.6"
+    "level-js": "^2.1.6",
+    "appcached": "^0.6.0"
   }
 }

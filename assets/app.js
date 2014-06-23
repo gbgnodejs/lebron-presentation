@@ -3,19 +3,32 @@ var insertCss = require('insert-css');
 var multilevel = require('multilevel');
 var Engine = require('engine.io-stream');
 var manifest = require('./manifest');
+var levelup = require('levelup');
+var leveljs = require('level-js');
 var db = multilevel.client(manifest);
+var localDb = levelup('db', {db: leveljs, valueEncoding: 'json'});
 
 window.db = db;
 var domify = require('domify');
 
 var stream = Engine('/db');
 stream.pipe(db.createRpcStream()).pipe(stream);
+stream.on('error', start);
 insertCss(fs.readFileSync(__dirname + '/style.css'));
 
 var storageKey = 'dotnetmentor.slide';
 var styleKey = storageKey + '.style';
 
-db.get('slides', load);
+db.get('slides', start);
+
+function start(err, slides) {
+  if (err) {
+    localDb.get('slides', load);
+  } else {
+    db.createReadStream().pipe(localDb.createWriteStream());
+    load(null, slides);
+  }
+}
 
 function load(err, slides) {
   if (err) return alert(err);
