@@ -1,0 +1,32 @@
+{
+  "name": "lebron_presentation",
+  "description": "lebron presentation for gbgnodejs",
+  "keywords": "lebron browserify leveldb npm",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jameskyburz/lebron_presentation"
+  },
+  "author": {
+    "name": "James Kyburz",
+    "email": "james.kyburz@gmail.com"
+  },
+  "main": "index.js",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "supervisor -i ./assets/manifest.json -w . -e \"js|css|html|json|svg\" node index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "insert-css": "^0.2.0",
+    "brfs": "^1.1.1",
+    "glob": "^4.0.2",
+    "levelup": "^0.18.3",
+    "multilevel": "^6.0.0",
+    "leveldown": "^0.10.2",
+    "engine.io-stream": "^0.4.3",
+    "domify": "^1.2.2",
+    "browserify": "^4.1.11",
+    "supervisor": "^0.6.0",
+    "level-js": "^2.1.6"
+  }
+}
