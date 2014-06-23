@@ -1,0 +1,16 @@
+<div data-title="Multilevel">
+  <p>
+  client
+  </p>
+  <pre>
+    db = multilevel.client(manifest);
+    stream.pipe(db.createRpcStream()).pipe(stream);
+  </pre>
+  <p>
+    server
+  </p>
+  <pre>
+    db = levelup();
+    stream.pipe(multilevel.server(db)).pipe(stream);
+  </pre>
+</div>
