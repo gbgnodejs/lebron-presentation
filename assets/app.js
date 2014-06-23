@@ -9,6 +9,7 @@ var db = multilevel.client(manifest);
 var localDb = levelup('db', {db: leveljs, valueEncoding: 'json'});
 
 window.db = db;
+window.localDb = localDb;
 var domify = require('domify');
 
 var stream = Engine('/db');
